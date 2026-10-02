@@ -1,0 +1,22 @@
+@Payment.Api_HostAddress = http://localhost:5190
+
+POST {{Payment.Api_HostAddress}}/api/payments
+Content-Type: application/json
+
+{
+  "orderId": "order-123",
+  "amount": 49.99,
+  "currency": "USD"
+}
+
+###
+
+GET {{Payment.Api_HostAddress}}/api/payments/00000000-0000-0000-0000-000000000000
+Accept: application/json
+
+###
+
+GET {{Payment.Api_HostAddress}}/api/payments/by-order/order-123
+Accept: application/json
+
+###

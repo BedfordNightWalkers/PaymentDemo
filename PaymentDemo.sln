@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.Api", "Payment.Api\Payment.Api.csproj", "{EE66B84A-7EE3-455B-83DA-5522EA8B4E99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaymentProvider.Mock", "PaymentProvider.Mock\PaymentProvider.Mock.csproj", "{58200D38-BF80-47E0-8F94-6A4BBCDC471A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EE66B84A-7EE3-455B-83DA-5522EA8B4E99}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE66B84A-7EE3-455B-83DA-5522EA8B4E99}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE66B84A-7EE3-455B-83DA-5522EA8B4E99}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE66B84A-7EE3-455B-83DA-5522EA8B4E99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58200D38-BF80-47E0-8F94-6A4BBCDC471A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58200D38-BF80-47E0-8F94-6A4BBCDC471A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58200D38-BF80-47E0-8F94-6A4BBCDC471A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58200D38-BF80-47E0-8F94-6A4BBCDC471A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

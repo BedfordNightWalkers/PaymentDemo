@@ -1,0 +1,27 @@
+# Build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.dll
+*.pdb
+
+# IDE / user-specific files
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.DotSettings.user
+
+# Local SQL Server database files (the schema comes from EF migrations)
+*.mdf
+*.ldf
+
+# Local secrets / environment overrides
+appsettings.*.local.json
+*.env
+
+# OS files
+Thumbs.db
+.DS_Store
