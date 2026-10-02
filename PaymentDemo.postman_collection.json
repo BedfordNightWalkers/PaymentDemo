@@ -1,0 +1,297 @@
+{
+  "info": {
+    "_postman_id": "1dafed86-b1b9-40ab-929f-378a1744c60c",
+    "name": "PaymentDemo",
+    "description": "Endpoints for Payment.Api (PaymentsController) and PaymentProvider.Mock (ChargesController).\n\nDefault base URLs match the `http` launch profiles. Switch to the https profile values (https://localhost:7085 / https://localhost:7111) in the collection variables if needed.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "2260620",
+    "_collection_link": "https://go.postman.co/collection/2260620-1dafed86-b1b9-40ab-929f-378a1744c60c?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Payment.Api - Payments",
+      "item": [
+        {
+          "name": "Create Payment",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 201 Created', () => pm.response.to.have.status(201));\nconst body = pm.response.json();\nif (body && body.id) {\n    pm.collectionVariables.set('paymentId', body.id);\n}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Idempotency-Key",
+                "value": "{{Idempotency-Key}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": \"{{orderId}}\",\n  \"amount\": 49.99,\n  \"currency\": \"USD\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{paymentApiBaseUrl}}/api/payments",
+              "host": [
+                "{{paymentApiBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "payments"
+              ]
+            },
+            "description": "Creates a payment. Returns 201 with the PaymentRecord and saves its id to the `paymentId` collection variable."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Payment - Declined (amount > 10,000)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": \"{{orderId}}\",\n  \"amount\": 15000,\n  \"currency\": \"USD\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{paymentApiBaseUrl}}/api/payments",
+              "host": [
+                "{{paymentApiBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "payments"
+              ]
+            },
+            "description": "The mock provider declines amounts over 10,000."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Payment - Invalid (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": \"\",\n  \"amount\": 0,\n  \"currency\": \"US\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{paymentApiBaseUrl}}/api/payments",
+              "host": [
+                "{{paymentApiBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "payments"
+              ]
+            },
+            "description": "Fails validation: empty orderId, zero amount, and a 2-letter currency."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Payment By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{paymentApiBaseUrl}}/api/payments/{{paymentId}}",
+              "host": [
+                "{{paymentApiBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "{{paymentId}}"
+              ]
+            },
+            "description": "Returns 200 with the PaymentRecord, or 404 if not found. Run 'Create Payment' first to populate `paymentId`."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Payments By Order Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{paymentApiBaseUrl}}/api/payments/by-order/{{orderId}}",
+              "host": [
+                "{{paymentApiBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "payments",
+                "by-order",
+                "{{orderId}}"
+              ]
+            },
+            "description": "Returns all payments for the given order id (empty list if none)."
+          },
+          "response": []
+        }
+      ],
+      "description": "## Payment.Api — Payments\n\nThis folder contains the payment creation and retrieval endpoints for the **Payment API**. It covers the full range of scenarios for `POST /api/payments` and `GET /api/payments/...`, including the happy-path (successful creation and lookup), a **declined** payment (amounts over 10,000 rejected by the mock provider), and an **invalid** request that triggers a `400` validation error (empty `orderId`, zero amount, and a 2-letter currency code).\n\nRetrieval requests depend on the `{{paymentId}}` and `{{orderId}}` collection variables — run **Create Payment** first to populate `paymentId` before executing **Get Payment By Id**."
+    },
+    {
+      "name": "PaymentProvider.Mock - Charges",
+      "item": [
+        {
+          "name": "Charge - Approved",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": \"{{orderId}}\",\n  \"amount\": 49.99,\n  \"currency\": \"usd\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{providerBaseUrl}}/api/charges",
+              "host": [
+                "{{providerBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "charges"
+              ]
+            },
+            "description": "Calls the mock provider directly. Amounts up to 10,000 are approved."
+          },
+          "response": []
+        },
+        {
+          "name": "Charge - Declined (amount > 10,000)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": \"{{orderId}}\",\n  \"amount\": 10000.01,\n  \"currency\": \"USD\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{providerBaseUrl}}/api/charges",
+              "host": [
+                "{{providerBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "charges"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Charge - Invalid (400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"orderId\": \"\",\n  \"amount\": -5,\n  \"currency\": \"EURO\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{providerBaseUrl}}/api/charges",
+              "host": [
+                "{{providerBaseUrl}}"
+              ],
+              "path": [
+                "api",
+                "charges"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "paymentApiBaseUrl",
+      "value": "http://localhost:5190"
+    },
+    {
+      "key": "providerBaseUrl",
+      "value": "http://localhost:5048"
+    },
+    {
+      "key": "paymentId",
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "orderId",
+      "value": "ORD-1001"
+    },
+    {
+      "key": "Idempotency-Key",
+      "value": ""
+    }
+  ]
+}
