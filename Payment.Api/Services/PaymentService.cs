@@ -59,6 +59,8 @@ public class PaymentService : IPaymentService
             {
                 await _idempotencyStore.AddProcessingAsync(idempotencyRequest, cancellationToken);
                 ownsIdempotencyRequest = true;
+                
+                await Task.Delay(5000, cancellationToken); //Testing concurrent requests
             }
             catch (DbUpdateException)
             {
